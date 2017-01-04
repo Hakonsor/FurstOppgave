@@ -12,10 +12,11 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- *
+ * Comparator som tar utgangspunt i norsk alfabet
+ * 
  * @author hakon
  */
-public class Komperator implements Comparator<List<String>> {
+public class Komperator implements Comparator<String> {
 
     private String rekkefølge = "<\0<0<1<2<3<4<5<6<7<8<9"
             + "<A,a<B,b<C,c<D,d<E,e<F,f<G,g<H,h<I,i<J,j"
@@ -34,19 +35,9 @@ public class Komperator implements Comparator<List<String>> {
     }
 
     @Override
-    public int compare(List<String> l1, List<String> l2) {
-        int antall_settninger;
-        if( l1.size() > l2.size()) antall_settninger = l2.size();
-        else antall_settninger = l1.size();
-        
-        for (int i = 0; i < antall_settninger; i++) {
-        int d = kollator.compare(l2.get(i), l1.get(i));
-                if (d != 0) {
-                    return d;
-                }
-            
-        }
-        return 0;
-    }
+    public int compare(String s1, String s2)
+   {
+       return kollator.compare(s1, s2);
+   }
 
 }

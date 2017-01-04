@@ -28,7 +28,7 @@ public class Furst extends Application {
         try {
 			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("FXML.fxml"));
 			Scene scene = new Scene(root);
-			//scene.getStylesheets().add(getClass().getResource("view/application.css").toExternalForm());
+
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Fürst hjemmeoppgave");
 			primaryStage.show();
@@ -42,26 +42,6 @@ public class Furst extends Application {
 			e.printStackTrace();
                        
 		}
-        /*
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
-      
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show(); 
-        */
     }
 
     /**
