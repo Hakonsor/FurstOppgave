@@ -1,4 +1,3 @@
-
 package furst;
 
 import java.io.BufferedReader;
@@ -12,11 +11,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringJoiner;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,8 +42,8 @@ import javafx.stage.Stage;
  * de andre klassene er i stor grad bare til pynt. Jeg er klar over at oppgaven
  * ikke speifiserta at jeg skulle lage et grafisk gresnsesnitt. Jeg antar at
  * hensikten med oppgaven er å vise frem hva jeg kan og har derfor tatt det med.
- * Jeg må beklage om det ikke er med genersike metoder, overlasting og polymorfisme.
- * Jeg erkjenner at det finnes mer elegante løsnigner.
+ * Jeg må beklage om det ikke er med genersike metoder, overlasting og
+ * polymorfisme. Jeg erkjenner at det finnes mer elegante løsnigner.
  *
  * @author Håkon Sørby
  */
@@ -46,8 +51,6 @@ public class FXMLController implements Initializable {
 
     @FXML
     private TextArea textarea;
-
-    private ArrayList<String> linje_liste = new ArrayList();
 
     private int antall_linjer = 10;
     @FXML
@@ -63,8 +66,12 @@ public class FXMLController implements Initializable {
 
     private boolean spesille_tegn_bool = true;
     private boolean popupbox_bool = true;
+    private boolean aktiver_trær = false;
     @FXML
     private CheckBox popupbox;
+
+    private SorteringViaLister svl = new SorteringViaLister(this);
+    private SorteringViaTrær svt = new SorteringViaTrær(this);
 
     /**
      * Initializes the controller class. Denne metoden setter checkboxene til
@@ -96,129 +103,18 @@ public class FXMLController implements Initializable {
         }
         try {
             BufferedReader in = new BufferedReader(new FileReader(file.toString()));
-            oppdaterTekst(in);
+            popupbox();
+            long tid = System.currentTimeMillis();
+            if (aktiver_trær) {
+                svt.SBinTre(in);
+                System.out.println(System.currentTimeMillis() - tid);
+            } else {
+                svl.oppdaterTekst(in);
+                System.out.println(System.currentTimeMillis() - tid);
+            }
         } catch (IOException e) {
             System.out.println("Korrupt filtype");
             System.out.println(e);
-        }
-    }
-
-    /**
-     * Fjerner alle tegn utenom nokstaver og mellomrom. Fjerner deretter alle
-     * mellomrom og sjekker om strenger er tom.
-     *
-     * Optimaliserting muligheter: Denne metoden sjekker stenger to ganger og
-     * jeg anser dette får å være unødvendig kostbart TODO: Finne bedre løsning
-     *
-     * @param s linjen som skal fjerne alle spesielle tegn
-     * @return String uten spesielle tegn
-     */
-    private String fjernSpesielleTegn(String s) {
-        String emty;
-        s = s.replaceAll("[^ÆØÅæøåa-zA-Z ]", "");
-        emty = s.replaceAll("[ ]", "");
-        if (emty.isEmpty()) {
-            return emty;
-        }
-        return s;
-    }
-
-    /**
-     * oppdaterTekst er et førsteutkast på lønsning av oppgaven slik jeg tolket
-     * den. Jeg er usikker på om dere ønsket at jeg skulle skrive en egen
-     * sorterings algoritme og har derfor startet med å lage en ekel variant og
-     * bruker heller tid på omtimalisering til slutt. Hvis jeg får tid kommer
-     * det en løsning i Stakker eller trær.
-     *
-     * Metoden tar inn en buffer og går igjennom alle settningene linje for
-     * linje. Hvis fjernSpesielleTegn er haket av så blir først alle tegn utenom
-     * bokstaver fjernet ifra teksten. Unødvendige mellomrom blir også fjernet
-     * ifra teksten. Linjene blir splittet på mellomrom og sortert i Java sitt
-     * innbygget soreringsmetode for arrays. Linjene blir deretter lagt inn i en
-     * liste og sortert via colletions innebygget sorterings metode. Jeg har
-     * forløpig ikke lagt til en norsk Comparator som tar hesyn til øæå. Siden
-     * den var spesifisert at brukeren skal bli spørret om antall linjer har
-     * lagt til en popup box som spørr om dette.
-     *
-     * Optimalisertings muligheter: En linje blir først fjernet for alle mulige
-     * mellomrom og spesielle tegn før sortering. Neste utkast vil jeg prøve å
-     * gjøre disse prosessene samtidtig får å unngå unødvendige kostnader. Denne
-     * metoden leser av linje til linje. Alternativet skulle jeg lese av til
-     * nermeste punktum, i oppgaven er det derimor spesifiert at jeg skulle lese
-     * av linjer.
-     *
-     * Feilhåndering: Jeg har ikke støtt på Execption call under begrenset
-     * testing, derfor er det bare utskrift til terminalern.
-     *
-     * @param in BufferReader som innholder txt filen
-     */
-    private void oppdaterTekst(BufferedReader in) {
-        String linje;
-        linje_liste.clear();
-        try {
-            while ((linje = in.readLine()) != null) {
-                if (spesille_tegn_bool) {
-                    linje = fjernSpesielleTegn(linje);
-                }
-                if (!linje.isEmpty()) {
-                    linje = sorterOrd(linje);
-                    linje_liste.add(linje);
-                }
-            }
-            Collections.sort(linje_liste);
-            if (popupbox_bool) {
-                Popup.display();
-                antall_linjer = Popup.antall_linjer;
-                antall_settninger_field.setText(Integer.toString(antall_linjer));
-            }
-            oppdaterTekst();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * Splitter en Streng på mellomrom inn i et Array og deretter sorterer via
-     * Arrays.sort.
-     *
-     * Forbedring muligheter: Det er mulig på endre regler for sortering ved å
-     * bruke Arrays.sort(setting, ( en norsk Comparator))
-     *
-     * @param settning
-     * @return alle ordene sortert
-     */
-    private String sorterOrd(String settning) {
-        String[] ord;
-        ord = settning.split(" ");
-        Arrays.sort(ord);
-        StringJoiner nysettning = new StringJoiner(" ");
-        for (String s : ord) {
-            if (!s.isEmpty()) {
-                nysettning.add(s);
-            }
-        }
-        return nysettning.toString();
-    }
-
-    /**
-     * Fjerner gammel tekst ifra textarea og printer inn gitt antall linjer ifra
-     * en liste.
-     *
-     * Altervativ: Bruken av foreach løkken med en break er kanskje en rar måte
-     * å løse oppgaven på, men jeg ser ikke noen grun til at den skal være noe
-     * dårligere en andre varianter.
-     *
-     */
-    private void oppdaterTekst() {
-        textarea.clear();
-        int i = 0;
-        for (String s : linje_liste) {
-            i++;
-            if (i > antall_linjer) {
-                break;
-            }
-            textarea.appendText(s);
-            textarea.appendText("\n");
         }
     }
 
@@ -231,7 +127,6 @@ public class FXMLController implements Initializable {
      *
      * @param event blir ikke brukt
      */
-
     @FXML
     private void lastNedUrl(ActionEvent event) {
         URL url;
@@ -239,7 +134,12 @@ public class FXMLController implements Initializable {
             url = new URL(url_field.getText());
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(url.openStream()));
-            oppdaterTekst(in);
+            popupbox();
+            if (aktiver_trær) {
+                svt.SBinTre(in);
+            } else {
+                svl.oppdaterTekst(in);
+            }
             url_feil.setText("");
         } catch (MalformedURLException ex) {
             url_feil.setText("Ugyldig url");
@@ -269,7 +169,11 @@ public class FXMLController implements Initializable {
         if (antall_settninger_field.getText().matches(regex)) {
             try {
                 antall_linjer = Integer.parseInt(antall_settninger_field.getText());
-                oppdaterTekst();
+                if (aktiver_trær) {
+                    svt.oppdaterTekst();
+                } else {
+                    svl.oppdaterTekst();
+                }
                 settninger_feil.setText("");
             } catch (NumberFormatException feil) {
                 settninger_feil.setText("For stort tall");
@@ -281,19 +185,27 @@ public class FXMLController implements Initializable {
     }
 
     /**
+     * Spør brukeren om hvis mange linjer han ønsker å bruke
+     */
+    private void popupbox() {
+        if (getPopupbox_bool()) {
+            Popup.display();
+            antall_linjer = Popup.antall_linjer;
+            setAntall_settninger_field(Integer.toString(antall_linjer));
+
+        }
+    }
+
+    /**
      * Endrer verdien til boolean som avgjør om Spesielle tegn skal fjernes
      * eller ikke
      *
      * @param event
      */
-
     @FXML
-    private void setSpesielleTegn(ActionEvent event) {
-        if (spesille_tegn_bool) {
-            spesille_tegn_bool = false;
-        } else {
-            spesille_tegn_bool = true;
-        }
+    private void setSpesielleTegn(ActionEvent event
+    ) {
+        spesille_tegn_bool = !spesille_tegn_bool;
     }
 
     /**
@@ -301,13 +213,59 @@ public class FXMLController implements Initializable {
      *
      * @param event
      */
+    @FXML
+    private void setPopupbox(ActionEvent event
+    ) {
+        popupbox_bool = !popupbox_bool;
+    }
+
+    public void clearTextArea() {
+        textarea.clear();
+    }
+
+    public boolean getSpesille_tegn_bool() {
+        return spesille_tegn_bool;
+    }
+
+    public int getAntall_linjer() {
+        return antall_linjer;
+    }
+
+    public void setAntall_linjer(int linjer) {
+        antall_linjer = linjer;
+    }
+
+    public boolean getPopupbox_bool() {
+        return popupbox_bool;
+    }
+
+    public void setAntall_settninger_field(String s) {
+
+        antall_settninger_field.setText(s);
+    }
+    
+    /**
+     * Under veldig store filer skulle det egentlig skrives ut en linje om gangen.
+     * Men får å oppnå det må jeg implementer tråder. Jeg har sett litt på løsninger får dette 
+     * men har ikke funnet en som fungerte bra med fx.
+     * 
+     * @param linje teksten som skal skrives ut til vindu
+     */
+
+    public void appendTextArea(String linje) {
+        textarea.appendText(linje);
+    }
 
     @FXML
-    private void setPopupbox(ActionEvent event) {
-        if (popupbox_bool) {
-            popupbox_bool = false;
+    private void aktiver_trær(ActionEvent event) {
+        if (aktiver_trær = !aktiver_trær) {
+            spesielle_tegn.disarm();
+            spesielle_tegn.setVisible(false);
         } else {
-            popupbox_bool = true;
+            spesielle_tegn.arm();
+            spesielle_tegn.setVisible(true);
         }
+
     }
+
 }

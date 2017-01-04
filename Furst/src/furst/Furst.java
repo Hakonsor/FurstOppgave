@@ -17,31 +17,31 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
- *
+ * Logikken til oppgaven ligger i FXMLController og sorteringsklassene.
  * @author hakon
  */
 public class Furst extends Application {
-    
+
     @Override
     public void start(Stage primaryStage) {
-        
-        try {
-			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("FXML.fxml"));
-			Scene scene = new Scene(root);
 
-			primaryStage.setScene(scene);
-			primaryStage.setTitle("Fürst hjemmeoppgave");
-			primaryStage.show();
-                        
-                        primaryStage.setOnCloseRequest(e ->{
-                            Platform.exit();
-                            System.exit(0);
-                        });
-                        
-		} catch(Exception e) {
-			e.printStackTrace();
-                       
-		}
+        try {
+            AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource("FXML.fxml"));
+            Scene scene = new Scene(root);
+
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Fürst hjemmeoppgave");
+            primaryStage.show();
+
+            primaryStage.setOnCloseRequest(e -> {
+                Platform.exit();
+                System.exit(0);
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
     }
 
     /**
@@ -50,5 +50,5 @@ public class Furst extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
