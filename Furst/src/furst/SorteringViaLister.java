@@ -31,30 +31,31 @@ public class SorteringViaLister {
     }
 
     /**
-     * oppdaterTekst er et førsteutkast på lønsning av oppgaven slik jeg tolket
+     * oppdaterTekst er et førsteutkast på løsning av oppgaven slik jeg tolket
      * den. Jeg er usikker på om dere ønsket at jeg skulle skrive en egen
-     * sorterings algoritme og har derfor startet med å lage en ekel variant og
-     * bruker heller tid på omtimalisering til slutt. Hvis jeg får tid kommer
+     * sorterings algoritme og har derfor startet med å lage en enkel variant og
+     * bruker heller tid på optimalisering til slutt. Hvis jeg får tid kommer
      * det en løsning i Stakker eller trær.
      *
      *
-     * Metoden tar inn en buffer og går igjennom alle settningene linje for
+     * Metoden tar inn en buffer og går igjennom alle setningene linje for
      * linje. Hvis fjernSpesielleTegn er haket av så blir først alle tegn utenom
      * bokstaver fjernet ifra teksten. Unødvendige mellomrom blir også fjernet
      * ifra teksten. Linjene blir splittet på mellomrom og sortert i Java sitt
      * innbygget soreringsmetode for arrays. Linjene blir deretter lagt inn i en
-     * liste og sortert via colletions innebygget sorterings metode. Jeg har
-     * forløpig ikke lagt til en norsk Comparator som tar hesyn til øæå. 
+     * liste og sortert via Collections innebygget sorterings metode. Jeg har
+     * foreløpig ikke lagt til en norsk Komparator som tar hensyn til øæå. 
      *
-     * Optimalisertings muligheter: En linje blir først fjernet for alle mulige
+     * Optimaliserings muligheter: En linje blir først fjernet for alle mulige
      * mellomrom og spesielle tegn før sortering. Neste utkast vil jeg prøve å
-     * gjøre disse prosessene samtidtig får å unngå unødvendige kostnader. Denne
+     * gjøre disse prosessene samtidig får å unngå unødvendige kostnader. Denne
      * metoden leser av linje til linje. Alternativet skulle jeg lese av til
-     * nermeste punktum, i oppgaven er det derimor spesifiert at jeg skulle lese
+     * nærmeste punktum, i oppgaven er det derimot spesifisert at jeg skulle lese
      * av linjer.
      *
-     * Feilhåndering: Jeg har ikke støtt på Execption call under begrenset
-     * testing, derfor er det bare utskrift til terminalern.
+     * Feilhåndtering: Jeg har ikke støtt på Execption call under begrenset
+     * testing, derfor er det bare utskrift til terminalen.
+
      *
      * @param in BufferReader som innholder txt filen
      */
@@ -71,9 +72,7 @@ public class SorteringViaLister {
                     linje_liste.add(linje);
                 }
             }
-            
             Collections.sort(linje_liste, Comparator.naturalOrder());
-            System.out.println("Oppdaterer tekst");
             oppdaterTekst();
         } catch (IOException ex) {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,9 +83,9 @@ public class SorteringViaLister {
      * Fjerner gammel tekst ifra textarea og printer inn gitt antall linjer ifra
      * en liste. Textarea.appendText
      *
-     * Altervativ: Bruken av foreach løkken med en break er kanskje en rar måte
-     * å løse oppgaven på, men jeg ser ikke noen grun til at den skal være noe
-     * dårligere en andre varianter.
+     * Alternativ: Bruken av foreach løkken med et break er kanskje en rar måte
+     * å løse oppgaven på, men jeg ser ikke noen grunn til at den skal være noe
+     * dårligere en annen variant.
      *
      */
     public void oppdaterTekst() {
@@ -108,11 +107,12 @@ public class SorteringViaLister {
      * Arrays.sort.
      *
      * Forbedring muligheter: Det er mulig på endre regler for sortering ved å
-     * bruke Arrays.sort(setting, ( en norsk Comparator))
+     * bruke Arrays.sort(setting, ( en norsk Komparator))
      *
-     * @param settning
+     * @param setning
      * @return alle ordene sortert
      */
+
     private String sorterOrd(String settning) {
         String[] ord;
         ord = settning.split(" ");
@@ -129,11 +129,10 @@ public class SorteringViaLister {
     /**
      * Fjerner alle tegn utenom bokstaver og mellomrom. Fjerner deretter alle
      * mellomrom.
-     *
-     *
      * @param s linjen som skal fjerne alle spesielle tegn
      * @return String uten spesielle tegn
      */
+
     private String fjernSpesielleTegn(String s) {
         s = s.replaceAll("[^ÆØÅæøåa-zA-Z ]", "");
         return s.trim();

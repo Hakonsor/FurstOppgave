@@ -29,12 +29,12 @@ public SorteringViaTrær(FXMLController main){
     /**
      * Alternativt til lister brukte prøvde jeg å lage en løsning med trær.
      * Tanken var at jeg setter alle ordene inn i et tre forløpende som jeg henter de ut at 
-     * bufferet. Ved å bruke et set og sjekke om bokstaven er dem jeg leter,
+     * bufferet. Ved å bruke et Set og sjekke om bokstaven er dem jeg leter,
      * finner jeg substenget jeg skal plukke ut og sette inn i treet. 
      * 
      * Denne prossess krever litt minnebruk og har egentlig ikke oppnådd noe raskere prosessering.
      * 
-     * En annen medot jeg hadde lyst å pøve med var priortert kø, 
+     * En annen metode jeg hadde lyst å prøve med var prioritert kø, 
      * men siden jeg bare hadde 3 korte dager må nok dette vente.
      *
      * Bugs: det ser også ut som at enkelte ord ikke blir lagt inn

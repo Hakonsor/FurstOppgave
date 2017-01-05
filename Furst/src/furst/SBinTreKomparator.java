@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package furst;
 
 import java.text.ParseException;
@@ -15,11 +11,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Comparator som tar utgangspunt i norsk alfabet
- * Dette var en norsk comparator, men får å sammeligne lettere blir det brukt 
+ * Comparator som tar utgangspunktet i norsk alfabet
+ * Dette var en norsk komparator, men får å sammenligne lettere blir det brukt 
  * Comparator.naturalOrder() istedenfor
  * @author hakon
  */
+
 public class SBinTreKomparator implements Comparator<SBinTre> {
 
     private String rekkefølge = "<\0<0<1<2<3<4<5<6<7<8<9"
@@ -37,6 +34,7 @@ public class SBinTreKomparator implements Comparator<SBinTre> {
             System.exit(0);
         }
     }
+
 
     @Override
     public int compare(SBinTre s1, SBinTre s2) {

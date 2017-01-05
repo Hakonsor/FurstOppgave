@@ -20,6 +20,6 @@
       <Label fx:id="settninger_feil" layoutX="102.0" layoutY="381.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="15.0" />
       <CheckBox fx:id="spesielle_tegn" layoutX="188.0" layoutY="432.0" mnemonicParsing="false" onAction="#setSpesielleTegn" text="Fjern spesielle tegn(lister)" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="188.0" />
       <CheckBox fx:id="popupbox" layoutX="15.0" layoutY="395.0" mnemonicParsing="false" onAction="#setPopupbox" text="Spør om  antall settninger" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" />
-      <CheckBox layoutX="371.0" layoutY="406.0" mnemonicParsing="false" onAction="#aktiver_trær" text="Bruk trær" />
+      <CheckBox layoutX="371.0" layoutY="406.0" mnemonicParsing="false" onAction="#aktiver_trær" text="Bruk trær" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="371.0" />
    </children>
 </AnchorPane>

@@ -38,12 +38,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class. Jeg har laget loggikken til opggaven i denne klassen,
+ * FXML Controller class. Jeg har laget logikken til oppgaven i denne klassen,
  * de andre klassene er i stor grad bare til pynt. Jeg er klar over at oppgaven
- * ikke speifiserta at jeg skulle lage et grafisk gresnsesnitt. Jeg antar at
+ * ikke spesifisert at jeg skulle lage et grafisk grensesnitt. Jeg antar at
  * hensikten med oppgaven er å vise frem hva jeg kan og har derfor tatt det med.
- * Jeg må beklage om det ikke er med genersike metoder, overlasting og
- * polymorfisme. Jeg erkjenner at det finnes mer elegante løsnigner.
+ * Jeg må beklage om det ikke er med generiske metoder, overlasting og
+ * polymorfisme. Jeg erkjenner at det finnes mer elegante løsninger.
+ *
  *
  * @author Håkon Sørby
  */
@@ -90,8 +91,8 @@ public class FXMLController implements Initializable {
      * Åpner et vindu der brukeren kan navigere til filen som skal bli åpnet.
      * Etter at filen har blitt valg blir oppdaterTekst kalt
      *
-     * Feilhåndering: Jeg har ikke støtt på Execption call under begrenset
-     * testing, derfor er det bare utskrift til terminalern.
+     * Feilhåndtering: Jeg har ikke støtt på Execption call under begrenset
+     * testing, derfor er det bare utskrift til terminalen.
      */
     @FXML
     public void lesFil() {
@@ -104,13 +105,10 @@ public class FXMLController implements Initializable {
         try {
             BufferedReader in = new BufferedReader(new FileReader(file.toString()));
             popupbox();
-            long tid = System.currentTimeMillis();
             if (aktiver_trær) {
                 svt.SBinTre(in);
-                System.out.println(System.currentTimeMillis() - tid);
             } else {
                 svl.oppdaterTekst(in);
-                System.out.println(System.currentTimeMillis() - tid);
             }
         } catch (IOException e) {
             System.out.println("Korrupt filtype");
@@ -121,7 +119,7 @@ public class FXMLController implements Initializable {
     /**
      * Når "hent fil fra url" knappen blir trykket blir teksten ifra url_field
      * og omgjort til en url objekt. Deretter blir det gjort et forsøk på å
-     * laste inn innholde ifra andressen til et buffer. Hvis det skjer en feil
+     * laste inn innholdet ifra Andressen til en buffer. Hvis det skjer en feil
      * under lesing kan brukeren se det dukke opp Ugyldig url. Kaller på
      * oppdatert tekst hvis alt gikk bra.
      *
@@ -150,15 +148,15 @@ public class FXMLController implements Initializable {
     }
 
     /**
-     * Henter altall settinger ifra antall_settninger_field, sjekker om den
-     * innholder kun tall. Hvis den innholder ulovelig karakterer så vil en
+     * Henter antall settinger ifra antall_settninger_field, sjekker om den
+     * inneholder kun tall. Hvis den inneholder ulovlig karakterer så vil en
      * label med skriften "Kun heltall" lyse under antall_settninger_field. Hvis
      * tallet er for stort så blir numberformatexeption kasten og Skriften for
      * stort tall vil lyse istedenfor.
      *
-     * Forbedrlinger: regex utrykket kan bli endret til å kun godkjenne tall
+     * Forbedringer: regex utrykket kan bli endret til å kun godkjenne tall
      * under en vis lengde, men da trengs den blir det kun en feilmelding.
-     * Altervativ kan den være en eksta funskjon som sider att alle settinger i
+     * Alternativ kan den være en ekstra funksjon som sider att alle settinger i
      * listen skal skrives ut.
      *
      * @param event
@@ -243,15 +241,14 @@ public class FXMLController implements Initializable {
 
         antall_settninger_field.setText(s);
     }
-    
+
     /**
-     * Under veldig store filer skulle det egentlig skrives ut en linje om gangen.
-     * Men får å oppnå det må jeg implementer tråder. Jeg har sett litt på løsninger får dette 
-     * men har ikke funnet en som fungerte bra med fx.
-     * 
+     * Under veldig store filer skulle det egentlig skrives ut en linje om
+     * gangen. Men får å oppnå det må jeg implementer tråder. Jeg har sett litt
+     * på løsninger får dette men har ikke funnet en som fungerte bra med fx.
+     *
      * @param linje teksten som skal skrives ut til vindu
      */
-
     public void appendTextArea(String linje) {
         textarea.appendText(linje);
     }
