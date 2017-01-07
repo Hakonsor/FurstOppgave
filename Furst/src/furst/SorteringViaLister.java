@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author hakon
  */
-public class SorteringViaLister {
+public class SorteringViaLister implements OppgaveLøsnig{
 
     FXMLController main;
     private ArrayList<String> linje_liste = new ArrayList();
@@ -125,6 +125,7 @@ public class SorteringViaLister {
         }
         return nysettning.toString();
     }
+    
 
     /**
      * Fjerner alle tegn utenom bokstaver og mellomrom. Fjerner deretter alle

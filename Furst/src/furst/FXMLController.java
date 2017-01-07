@@ -64,6 +64,8 @@ public class FXMLController implements Initializable {
     private Label settninger_feil;
     @FXML
     private CheckBox spesielle_tegn;
+    
+    private OppgaveLøsnig sorteringsmetode;
 
     private boolean spesille_tegn_bool = true;
     private boolean popupbox_bool = true;
@@ -84,6 +86,7 @@ public class FXMLController implements Initializable {
         settninger_feil.setTextFill(Color.web("#FF0000"));
         spesielle_tegn.setSelected(true);
         popupbox.setSelected(true);
+        sorteringsmetode = svl;
     }
 
     /**
@@ -105,11 +108,8 @@ public class FXMLController implements Initializable {
         try {
             BufferedReader in = new BufferedReader(new FileReader(file.toString()));
             popupbox();
-            if (aktiver_trær) {
-                svt.SBinTre(in);
-            } else {
-                svl.oppdaterTekst(in);
-            }
+            sorteringsmetode.oppdaterTekst(in);
+            
         } catch (IOException e) {
             System.out.println("Korrupt filtype");
             System.out.println(e);
@@ -167,11 +167,7 @@ public class FXMLController implements Initializable {
         if (antall_settninger_field.getText().matches(regex)) {
             try {
                 antall_linjer = Integer.parseInt(antall_settninger_field.getText());
-                if (aktiver_trær) {
-                    svt.oppdaterTekst();
-                } else {
-                    svl.oppdaterTekst();
-                }
+                sorteringsmetode.oppdaterTekst();
                 settninger_feil.setText("");
             } catch (NumberFormatException feil) {
                 settninger_feil.setText("For stort tall");
@@ -256,9 +252,11 @@ public class FXMLController implements Initializable {
     @FXML
     private void aktiver_trær(ActionEvent event) {
         if (aktiver_trær = !aktiver_trær) {
+            sorteringsmetode = svt;
             spesielle_tegn.disarm();
             spesielle_tegn.setVisible(false);
         } else {
+            sorteringsmetode = svl;
             spesielle_tegn.arm();
             spesielle_tegn.setVisible(true);
         }
